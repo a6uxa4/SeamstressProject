@@ -7,18 +7,46 @@ import {
   Platform,
   StyleSheet,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import * as Animatable from "react-native-animatable";
 import { ClipPath, Defs, G, Path, Rect, Svg } from "react-native-svg";
 import Feather from "react-native-vector-icons/Feather";
 import EvilIcons from "react-native-vector-icons/SimpleLineIcons";
+import { FIREBASE_AUTH } from "../../FirebaseConfig";
 
-export default function SignUp() {
+export function SignUp({ navigation }) {
   const [data, setData] = useState({
     email: "",
     password: "",
     secureTextEntry: true,
   });
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const auth = FIREBASE_AUTH;
+
+  const signUpWithEmailAndPasswordHandler = async () => {
+    setLoading(true);
+    try {
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+      navigation.navigate("SignIn");
+      alert(response);
+    } catch (error) {
+      alert(error);
+    } finally {
+      setData({
+        email: "",
+        password: "",
+        secureTextEntry: true,
+      });
+      setLoading(false);
+    }
+  };
 
   const handleEmailChange = (val: string) => {
     setData({
@@ -46,7 +74,10 @@ export default function SignUp() {
       <View style={styles.header}>
         <Text style={styles.text_header}>Регистрация !</Text>
         <View style={styles.containerIhaveAuth}>
-          <TouchableOpacity style={styles.containerIhaveAuthButton}>
+          <TouchableOpacity
+            style={styles.containerIhaveAuthButton}
+            onPress={() => navigation.navigate("SignIn")}
+          >
             <Text style={styles.textSignGoogle}>У меня есть аккаунт</Text>
           </TouchableOpacity>
         </View>
@@ -84,8 +115,13 @@ export default function SignUp() {
             </TouchableOpacity>
           </View>
           <View style={styles.button}>
-            <TouchableOpacity style={styles.signIn}>
+            <TouchableOpacity
+              style={styles.signIn}
+              disabled={loading}
+              onPress={signUpWithEmailAndPasswordHandler}
+            >
               <Text style={styles.textSign}>Регистрация</Text>
+              {loading && <ActivityIndicator color="white" />}
             </TouchableOpacity>
           </View>
           <View style={styles.button}>
@@ -202,6 +238,9 @@ const styles = StyleSheet.create({
   signIn: {
     width: "90%",
     height: 50,
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
     alignItems: "center",
     justifyContent: "center",
     borderColor: "#BDBDBD",

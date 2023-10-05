@@ -6,7 +6,7 @@ import { Works } from "../../screens/works";
 import { Profile } from "../../screens/profile";
 import { Cooperator } from "../../screens/cooperator";
 
-export default function Layout() {
+export function Layout() {
   const [selected, setSelected] = useState(0);
 
   const SCREENS = [<Works />, <Profile />, <Cooperator />];
