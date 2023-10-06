@@ -1,11 +1,10 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export function Profile({ navigation }) {
+export function Profile() {
   async function removeUserData() {
     try {
       await AsyncStorage.removeItem("user");
-      navigation.navigate("SignIn");
       console.log("Данные пользователя успешно удалены из AsyncStorage.");
     } catch (error) {
       console.error(

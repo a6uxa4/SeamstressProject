@@ -17,7 +17,7 @@ import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const SignIn = ({ navigation }) => {
+export const SignIn = ({ navigation: { navigate } }) => {
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -35,11 +35,16 @@ export const SignIn = ({ navigation }) => {
       );
       const user = response.user;
       await AsyncStorage.setItem("user", JSON.stringify(user));
-      navigation.navigate("Inside");
+      navigate("Inside");
       alert("Succes");
     } catch (error) {
-      alert("Error");
+      // alert("Error");
     } finally {
+      setData({
+        email: "",
+        password: "",
+        secureTextEntry: true,
+      });
       setLoading(false);
     }
   };
@@ -72,7 +77,7 @@ export const SignIn = ({ navigation }) => {
         <View style={styles.containerIhaveAuth}>
           <TouchableOpacity
             style={styles.containerIhaveAuthButton}
-            onPress={() => navigation.navigate("SignUp")}
+            onPress={() => navigate("SignUp")}
           >
             <Text style={styles.textSignGoogle}>У меня нет аккаунта</Text>
           </TouchableOpacity>

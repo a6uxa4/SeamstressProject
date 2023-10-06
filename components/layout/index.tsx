@@ -9,11 +9,7 @@ import { Cooperator } from "../../screens/cooperator";
 export function Layout({ navigation }) {
   const [selected, setSelected] = useState(1);
 
-  const SCREENS = [
-    <Works />,
-    <Profile navigation={{ navigation }} />,
-    <Cooperator />,
-  ];
+  const SCREENS = [<Works />, <Profile />, <Cooperator />];
   return (
     <View style={styles.container}>
       {SCREENS[selected]}

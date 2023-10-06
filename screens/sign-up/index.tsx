@@ -17,7 +17,7 @@ import EvilIcons from "react-native-vector-icons/SimpleLineIcons";
 import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export function SignUp({ navigation }) {
+export function SignUp({ navigation: { goBack, navigate } }) {
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -35,7 +35,7 @@ export function SignUp({ navigation }) {
       );
       const user = response.user;
       await AsyncStorage.setItem("user", JSON.stringify(user));
-      navigation.navigate("Inside");
+      navigate("Inside");
       alert("Hello");
     } catch (error) {
       alert("Error");
@@ -77,7 +77,7 @@ export function SignUp({ navigation }) {
         <View style={styles.containerIhaveAuth}>
           <TouchableOpacity
             style={styles.containerIhaveAuthButton}
-            onPress={() => navigation.navigate("SignIn")}
+            onPress={() => goBack()}
           >
             <Text style={styles.textSignGoogle}>У меня есть аккаунт</Text>
           </TouchableOpacity>
