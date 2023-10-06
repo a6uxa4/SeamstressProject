@@ -15,6 +15,7 @@ import { ClipPath, Defs, G, Path, Rect, Svg } from "react-native-svg";
 import Feather from "react-native-vector-icons/Feather";
 import EvilIcons from "react-native-vector-icons/SimpleLineIcons";
 import { FIREBASE_AUTH } from "../../FirebaseConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function SignUp({ navigation }) {
   const [data, setData] = useState({
@@ -24,20 +25,20 @@ export function SignUp({ navigation }) {
   });
   const [loading, setLoading] = useState<boolean>(false);
 
-  const auth = FIREBASE_AUTH;
-
   const signUpWithEmailAndPasswordHandler = async () => {
     setLoading(true);
     try {
       const response = await createUserWithEmailAndPassword(
-        auth,
+        FIREBASE_AUTH,
         data.email,
         data.password
       );
-      navigation.navigate("SignIn");
-      alert(response);
+      const user = response.user;
+      await AsyncStorage.setItem("user", JSON.stringify(user));
+      navigation.navigate("Inside");
+      alert("Hello");
     } catch (error) {
-      alert(error);
+      alert("Error");
     } finally {
       setData({
         email: "",
@@ -127,7 +128,7 @@ export function SignUp({ navigation }) {
           <View style={styles.button}>
             <TouchableOpacity style={styles.google}>
               <Svg width={25} height={25} viewBox="0 0 16 17" fill="none">
-                <G clip-path="url(#clip0_9797_316)">
+                <G clipPath="url(#clip0_9797_316)">
                   <Path
                     d="M15.7376 8.68372C15.7376 8.1399 15.6934 7.59315 15.599 7.05815H8.02661V10.1388H12.363C12.183 11.1324 11.6048 12.0113 10.7582 12.5698V14.5687H13.3453C14.8645 13.1754 15.7376 11.1177 15.7376 8.68372Z"
                     fill="#4285F4"

@@ -1,12 +1,11 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { FIREBASE_AUTH } from "./FirebaseConfig";
 
 import { SignIn } from "./screens/sign-in";
 import { SignUp } from "./screens/sign-up";
 import { Layout } from "./components/layout";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 
@@ -14,9 +13,15 @@ export default function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      setUser(user);
-    });
+    AsyncStorage.getItem("user")
+      .then((userData) => {
+        if (userData) {
+          setUser(JSON.parse(userData));
+        }
+      })
+      .catch((error) => {
+        console.error("Ошибка при чтении данных из AsyncStorage:", error);
+      });
   }, []);
 
   return (

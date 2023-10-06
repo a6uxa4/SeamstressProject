@@ -6,10 +6,14 @@ import { Works } from "../../screens/works";
 import { Profile } from "../../screens/profile";
 import { Cooperator } from "../../screens/cooperator";
 
-export function Layout() {
-  const [selected, setSelected] = useState(0);
+export function Layout({ navigation }) {
+  const [selected, setSelected] = useState(1);
 
-  const SCREENS = [<Works />, <Profile />, <Cooperator />];
+  const SCREENS = [
+    <Works />,
+    <Profile navigation={{ navigation }} />,
+    <Cooperator />,
+  ];
   return (
     <View style={styles.container}>
       {SCREENS[selected]}
