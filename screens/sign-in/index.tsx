@@ -13,9 +13,6 @@ import * as Animatable from "react-native-animatable";
 import { ClipPath, Defs, G, Path, Rect, Svg } from "react-native-svg";
 import Feather from "react-native-vector-icons/Feather";
 import EvilIcons from "react-native-vector-icons/SimpleLineIcons";
-import { FIREBASE_AUTH } from "../../FirebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const SignIn = ({ navigation: { navigate } }) => {
   const [data, setData] = useState({
@@ -24,30 +21,6 @@ export const SignIn = ({ navigation: { navigate } }) => {
     secureTextEntry: true,
   });
   const [loading, setLoading] = useState<boolean>(false);
-
-  const signInWithEmailAndPasswordHandler = async () => {
-    setLoading(true);
-    try {
-      const response = await signInWithEmailAndPassword(
-        FIREBASE_AUTH,
-        data.email,
-        data.password
-      );
-      const user = response.user;
-      await AsyncStorage.setItem("user", JSON.stringify(user));
-      navigate("Inside");
-      alert("Succes");
-    } catch (error) {
-      // alert("Error");
-    } finally {
-      setData({
-        email: "",
-        password: "",
-        secureTextEntry: true,
-      });
-      setLoading(false);
-    }
-  };
 
   const handleEmailChange = (val: string) => {
     setData({
@@ -119,7 +92,7 @@ export const SignIn = ({ navigation: { navigate } }) => {
             <TouchableOpacity
               style={styles.signIn}
               disabled={loading}
-              onPress={signInWithEmailAndPasswordHandler}
+              // onPress={}
             >
               <Text style={styles.textSign}>Войти</Text>
               {loading && <ActivityIndicator color="white" />}

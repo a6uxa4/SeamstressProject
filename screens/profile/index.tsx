@@ -1,27 +1,7 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StyleSheet, View } from "react-native";
 
 export function Profile() {
-  async function removeUserData() {
-    try {
-      await AsyncStorage.removeItem("user");
-      console.log("Данные пользователя успешно удалены из AsyncStorage.");
-    } catch (error) {
-      console.error(
-        "Ошибка при удалении данных пользователя из AsyncStorage:",
-        error
-      );
-    }
-  }
-  return (
-    <View style={styles.container}>
-      <View style={styles.button}>
-        <TouchableOpacity style={styles.signIn} onPress={removeUserData}>
-          <Text style={styles.textSign}>Выйти</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+  return <View style={styles.container}></View>;
 }
 
 const styles = StyleSheet.create({

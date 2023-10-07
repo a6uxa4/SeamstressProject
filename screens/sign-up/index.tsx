@@ -9,13 +9,10 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import * as Animatable from "react-native-animatable";
 import { ClipPath, Defs, G, Path, Rect, Svg } from "react-native-svg";
 import Feather from "react-native-vector-icons/Feather";
 import EvilIcons from "react-native-vector-icons/SimpleLineIcons";
-import { FIREBASE_AUTH } from "../../FirebaseConfig";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function SignUp({ navigation: { goBack, navigate } }) {
   const [data, setData] = useState({
@@ -24,30 +21,6 @@ export function SignUp({ navigation: { goBack, navigate } }) {
     secureTextEntry: true,
   });
   const [loading, setLoading] = useState<boolean>(false);
-
-  const signUpWithEmailAndPasswordHandler = async () => {
-    setLoading(true);
-    try {
-      const response = await createUserWithEmailAndPassword(
-        FIREBASE_AUTH,
-        data.email,
-        data.password
-      );
-      const user = response.user;
-      await AsyncStorage.setItem("user", JSON.stringify(user));
-      navigate("Inside");
-      alert("Hello");
-    } catch (error) {
-      alert("Error");
-    } finally {
-      setData({
-        email: "",
-        password: "",
-        secureTextEntry: true,
-      });
-      setLoading(false);
-    }
-  };
 
   const handleEmailChange = (val: string) => {
     setData({
@@ -119,7 +92,7 @@ export function SignUp({ navigation: { goBack, navigate } }) {
             <TouchableOpacity
               style={styles.signIn}
               disabled={loading}
-              onPress={signUpWithEmailAndPasswordHandler}
+              // onPress={}
             >
               <Text style={styles.textSign}>Регистрация</Text>
               {loading && <ActivityIndicator color="white" />}
