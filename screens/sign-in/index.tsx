@@ -13,6 +13,8 @@ import * as Animatable from "react-native-animatable";
 import { ClipPath, Defs, G, Path, Rect, Svg } from "react-native-svg";
 import Feather from "react-native-vector-icons/Feather";
 import EvilIcons from "react-native-vector-icons/SimpleLineIcons";
+import { FIREBASE_AUTH } from "../../config/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 export const SignIn = ({ navigation: { navigate } }) => {
   const [data, setData] = useState({
@@ -41,6 +43,27 @@ export const SignIn = ({ navigation: { navigate } }) => {
       ...data,
       secureTextEntry: !data.secureTextEntry,
     });
+  };
+
+  const signIn = async () => {
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(
+        FIREBASE_AUTH,
+        data.email,
+        data.password
+      );
+      setLoading(false);
+      setData({
+        email: "",
+        password: "",
+        secureTextEntry: true,
+      });
+    } catch (error) {
+      console.log("error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -92,7 +115,7 @@ export const SignIn = ({ navigation: { navigate } }) => {
             <TouchableOpacity
               style={styles.signIn}
               disabled={loading}
-              // onPress={}
+              onPress={signIn}
             >
               <Text style={styles.textSign}>Войти</Text>
               {loading && <ActivityIndicator color="white" />}
