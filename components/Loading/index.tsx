@@ -1,5 +1,9 @@
-import React from "react";
+import { Text, View } from "react-native";
 
 export default function Loading() {
-  return <div>Loading</div>;
+  return (
+    <View>
+      <Text>Loading...</Text>
+    </View>
+  );
 }
