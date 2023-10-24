@@ -16,7 +16,7 @@ import EvilIcons from "react-native-vector-icons/SimpleLineIcons";
 import { FIREBASE_AUTH } from "../../config/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-export function SignUp({ navigation: { goBack } }) {
+export function SignUp({ navigation: { navigate } }) {
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -73,7 +73,7 @@ export function SignUp({ navigation: { goBack } }) {
         <View style={styles.containerIhaveAuth}>
           <TouchableOpacity
             style={styles.containerIhaveAuthButton}
-            onPress={() => goBack()}
+            onPress={() => navigate("SignIn")}
           >
             <Text style={styles.textSignGoogle}>У меня есть аккаунт</Text>
           </TouchableOpacity>

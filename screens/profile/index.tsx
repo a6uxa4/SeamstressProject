@@ -40,15 +40,10 @@ const styles = StyleSheet.create({
   },
   facebook: {
     width: "90%",
-    height: "100%",
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderColor: "#BDBDBD",
+    height: 30,
     borderWidth: 1,
     borderRadius: 8,
-    marginTop: 20,
+    marginTop: 200,
   },
   textSignFacebook: {
     color: "#757575",
