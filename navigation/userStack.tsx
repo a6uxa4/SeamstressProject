@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 import Octicons from "react-native-vector-icons/Octicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -8,7 +7,6 @@ import Feather from "react-native-vector-icons/Feather";
 import { Works } from "../screens/works";
 import { Profile } from "../screens/profile";
 import { Cooperator } from "../screens/cooperator";
-import { useLoginMutation } from "../services/auth.service";
 
 const Tab = createBottomTabNavigator();
 
@@ -23,10 +21,18 @@ export default function userStack() {
           name="Работа"
           component={Works}
           options={{
+            tabBarLabel: ({ focused, children }) => (
+              <Text style={{ color: !focused ? "#808080" : "orange" }}>
+                {children}
+              </Text>
+            ),
             tabBarIcon: ({ focused }) => {
               return (
                 <View
-                  style={{ alignItems: "center", justifyContent: "center" }}
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   <Octicons
                     name="organization"
@@ -42,10 +48,18 @@ export default function userStack() {
           name="Профиль"
           component={Profile}
           options={{
+            tabBarLabel: ({ focused, children }) => (
+              <Text style={{ color: !focused ? "#808080" : "orange" }}>
+                {children}
+              </Text>
+            ),
             tabBarIcon: ({ focused }) => {
               return (
                 <View
-                  style={{ alignItems: "center", justifyContent: "center" }}
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   <FontAwesome5Icon
                     name="user"
@@ -61,10 +75,18 @@ export default function userStack() {
           name="Сотрудники"
           component={Cooperator}
           options={{
+            tabBarLabel: ({ focused, children }) => (
+              <Text style={{ color: !focused ? "#808080" : "orange" }}>
+                {children}
+              </Text>
+            ),
             tabBarIcon: ({ focused }) => {
               return (
                 <View
-                  style={{ alignItems: "center", justifyContent: "center" }}
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   <Feather
                     name="users"
