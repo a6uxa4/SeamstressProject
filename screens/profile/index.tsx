@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   container_card_profile: {
     width: "100%",
-    height: 100,
+    height: 90,
     backgroundColor: "#013c58",
     borderRadius: 10,
     padding: 16,
@@ -167,8 +167,8 @@ const styles = StyleSheet.create({
     gap: 11,
   },
   user_logo: {
-    width: 70,
-    height: 70,
+    width: 60,
+    height: 60,
     borderRadius: 100,
     backgroundColor: "white",
     alignItems: "center",
