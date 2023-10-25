@@ -5,7 +5,7 @@ import { FIREBASE_AUTH } from "../../config/firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { signOut } from "firebase/auth";
 
-export function Profile() {
+export function Profile({ navigation: { navigate } }) {
   const handleLogout = async () => {
     try {
       await signOut(FIREBASE_AUTH);
@@ -48,7 +48,10 @@ export function Profile() {
         </View>
       </View>
       <Animatable.View animation="fadeInUpBig" style={styles.container_menu}>
-        <TouchableOpacity style={styles.container_menu_card}>
+        <TouchableOpacity
+          style={styles.container_menu_card}
+          onPress={() => navigate("MyProfile")}
+        >
           <View style={styles.container_icon}>
             <Svg width={20} height={20} viewBox="0 0 14 18" fill="none">
               <Path
