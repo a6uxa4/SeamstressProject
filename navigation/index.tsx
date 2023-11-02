@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import UserStack from "./userStack";
 import AuthStack from "./authStack";
 import { onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "../config/firebase";
 import Loading from "../components/Loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import WorkerStack from "./workerStack";
+import OrganizationStack from "./organizationStack";
 
 export default function RootNavigation() {
   const [user, setUser] = useState(null);
@@ -36,9 +37,20 @@ export default function RootNavigation() {
     };
   }, []);
 
+  const role = "WORKER" || "ORGANIZATION";
+
   if (loading) {
     return <Loading />;
   } else {
-    return user ? <UserStack /> : <AuthStack />;
+    if (user) {
+      switch (role) {
+        case "WORKER":
+          return <WorkerStack />;
+        case "ORGANIZATION":
+          return <OrganizationStack />;
+      }
+    } else {
+      <AuthStack />;
+    }
   }
 }

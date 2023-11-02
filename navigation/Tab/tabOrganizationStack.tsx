@@ -1,13 +1,13 @@
 import { Text, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Works } from "../screens/works";
-import { Profile } from "../screens/profile";
-import { Cooperator } from "../screens/cooperator";
+import { Works } from "../../screens/works";
+import { Profile } from "../../screens/profile";
+import { Cooperator } from "../../screens/cooperator";
 import { Path, Svg } from "react-native-svg";
 
 const Tab = createBottomTabNavigator();
 
-export default function TabStack() {
+export default function OrganizationTabStack() {
   return (
     <Tab.Navigator
       initialRouteName="Профиль"
