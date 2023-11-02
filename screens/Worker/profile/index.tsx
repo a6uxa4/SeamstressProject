@@ -1,4 +1,11 @@
-import { StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import * as Animatable from "react-native-animatable";
 import { Path, Svg } from "react-native-svg";
 import { FIREBASE_AUTH } from "../../../config/firebase";
@@ -17,6 +24,18 @@ export function Profile({ navigation: { navigate } }) {
       console.error("Error logging out:", error);
     }
   };
+
+  const createTwoButtonAlert = () =>
+    Alert.alert(
+      "Подтвердите действие",
+      "Вы уверены что хотите выйти из приложения?",
+      [
+        {
+          text: "Отмена",
+        },
+        { text: "Да, уверен", onPress: handleLogout },
+      ]
+    );
 
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
@@ -163,7 +182,7 @@ export function Profile({ navigation: { navigate } }) {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={handleLogout}
+          onPress={createTwoButtonAlert}
           style={styles.container_menu_card}
         >
           <View style={styles.container_icon}>
