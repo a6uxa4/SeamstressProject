@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import AuthStack from "./authStack";
+import AuthStack from "./Stack/authStack";
 import { onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "../config/firebase";
 import Loading from "../components/Loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import WorkerStack from "./workerStack";
-import OrganizationStack from "./organizationStack";
+import WorkerStack from "./Stack/workerStack";
+import OrganizationStack from "./Stack/organizationStack";
 
 export default function RootNavigation() {
   const [user, setUser] = useState(null);
