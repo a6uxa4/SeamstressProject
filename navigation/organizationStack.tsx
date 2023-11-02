@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { MyProfile } from "../screens/profile/my-profile";
 import OrganizationTabStack from "./Tab/tabOrganizationStack";
+import { MyProfile } from "../screens/Worker/profile/my-profile";
 
 const Stack = createNativeStackNavigator();
 

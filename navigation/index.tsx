@@ -39,6 +39,8 @@ export default function RootNavigation() {
 
   const role = "WORKER" || "ORGANIZATION";
 
+  console.log(user);
+
   if (loading) {
     return <Loading />;
   } else {
@@ -48,9 +50,11 @@ export default function RootNavigation() {
           return <WorkerStack />;
         case "ORGANIZATION":
           return <OrganizationStack />;
+        default:
+          return <AuthStack />;
       }
     } else {
-      <AuthStack />;
+      return <AuthStack />;
     }
   }
 }
