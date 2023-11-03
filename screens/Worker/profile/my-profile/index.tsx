@@ -12,8 +12,12 @@ import { FIREBASE_AUTH } from "../../../../config/firebase";
 import { updateProfile } from "firebase/auth";
 
 export function MyProfile({ navigation: { goBack } }) {
+  const [email, setEmail] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [gender, setGender] = useState<"MAN" | "WOMEN">("MAN");
+  const [birthDay, setBirthDay] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const saveProfile = () => {
@@ -51,7 +55,13 @@ export function MyProfile({ navigation: { goBack } }) {
         </TouchableOpacity>
         <Text style={styles.header_text}>Персональные данные</Text>
       </View>
-      <View>
+      <View style={styles.menu}>
+        <InputUI
+          placeholder="Email"
+          label="Email"
+          value={email}
+          onChangeText={(val) => setEmail(val)}
+        />
         <InputUI
           placeholder="Имя"
           label="Имя"
@@ -63,6 +73,24 @@ export function MyProfile({ navigation: { goBack } }) {
           label="Фамилия"
           value={lastName}
           onChangeText={(val) => setLastName(val)}
+        />
+        <InputUI
+          placeholder="Номер телефона"
+          label="Номер телефона"
+          value={phoneNumber}
+          onChangeText={(val) => setPhoneNumber(val)}
+        />
+        <InputUI
+          placeholder="Пол"
+          label="Пол"
+          value={gender}
+          onChangeText={(val) => setGender(val)}
+        />
+        <InputUI
+          placeholder="День рождение"
+          label="День рождение"
+          value={birthDay}
+          onChangeText={(val) => setBirthDay(val)}
         />
         <View style={styles.button}>
           <TouchableOpacity
@@ -105,6 +133,10 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  menu: {
+    display: "flex",
+    gap: 10,
   },
   signIn: {
     width: "100%",
