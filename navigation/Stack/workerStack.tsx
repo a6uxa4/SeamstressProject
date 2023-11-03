@@ -4,6 +4,7 @@ import WorkerTabStack from "../Tab/tabWorkerStack";
 
 import { MyProfile } from "../../screens/Worker/profile/my-profile";
 import { NewPassword } from "../../screens/Worker/profile/new-password";
+import { InnerMessage } from "../../screens/Worker/message/inner_message";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,8 +16,11 @@ export default function WorkerStack() {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Tab" component={WorkerTabStack} />
+        {/* Profile */}
         <Stack.Screen name="MyProfile" component={MyProfile} />
         <Stack.Screen name="NewPassword" component={NewPassword} />
+        {/* Message */}
+        <Stack.Screen name="InnerMessage" component={InnerMessage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

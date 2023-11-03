@@ -1,9 +1,14 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export function Message() {
+export function Message({ navigation: { navigate } }) {
   return (
     <View style={styles.container}>
-      <Text>Message</Text>
+      <TouchableOpacity
+        onPress={() => navigate("InnerMessage")}
+        style={{ backgroundColor: "blue", padding: 30 }}
+      >
+        <Text>Asan Asanov</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -12,6 +17,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
-    backgroundColor: "blue",
+    padding: 16,
+    paddingTop: 80,
   },
 });
