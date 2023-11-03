@@ -175,8 +175,10 @@ export function Profile({ navigation: { navigate } }) {
             </Svg>
           </View>
           <View style={styles.container_text_and_description}>
-            <Text style={styles.card_name}>Забыли пароль</Text>
-            <Text style={styles.card_description}>Измените пароль</Text>
+            <Text style={styles.card_name}>Изменить пароль</Text>
+            <Text style={styles.card_description}>
+              Вы хотите изменить пароль ?
+            </Text>
           </View>
           <View style={styles.container_icon_navigate}>
             <Svg width={7} height={12} viewBox="0 0 7 12" fill="#ABABAB">

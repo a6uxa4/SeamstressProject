@@ -7,8 +7,53 @@ import {
 } from "react-native";
 import { Path, Svg } from "react-native-svg";
 import { InputUI } from "../../../../components/UI/Input";
+import { useState } from "react";
+import { FIREBASE_AUTH } from "../../../../config/firebase";
+import {
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword,
+} from "firebase/auth";
 
 export function NewPassword({ navigation: { goBack } }) {
+  const [oldPassword, setOldPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [repeatPassword, setRepeatPassword] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleChangePassword = () => {
+    if (newPassword !== repeatPassword) {
+      setError("Новые пароли не совпадают");
+      return;
+    }
+    setError(null);
+    setLoading(true);
+    const user = FIREBASE_AUTH.currentUser;
+    const credential = EmailAuthProvider.credential(user.email, oldPassword);
+    reauthenticateWithCredential(user, credential)
+      .then(() => {
+        updatePassword(user, newPassword)
+          .then(() => {
+            setOldPassword("");
+            setNewPassword("");
+            setRepeatPassword("");
+            goBack();
+          })
+          .catch((error) => {
+            setError(error.message);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      })
+      .catch((error) => {
+        setError(
+          "Аутентификация не удалась. Пожалуйста, проверьте старый пароль."
+        );
+      });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -37,21 +82,32 @@ export function NewPassword({ navigation: { goBack } }) {
           password={true}
           placeholder="Старый пароль"
           label="Старый пароль"
+          value={oldPassword}
+          onChangeText={(val) => setOldPassword(val)}
         />
         <InputUI
           password={true}
           placeholder="Новый пароль"
           label="Новый пароль"
+          value={newPassword}
+          onChangeText={(val) => setNewPassword(val)}
         />
         <InputUI
           password={true}
           placeholder="Повторите новый пароль"
           label="Повторите новый пароль"
+          value={repeatPassword}
+          onChangeText={(val) => setRepeatPassword(val)}
         />
+        {error && <Text style={styles.errorText}>{error}</Text>}
         <View style={styles.button}>
-          <TouchableOpacity style={styles.signIn} onPress={goBack}>
+          <TouchableOpacity
+            style={styles.signIn}
+            onPress={handleChangePassword}
+            disabled={loading}
+          >
             <Text style={styles.textSign}>Сохранить</Text>
-            {false && <ActivityIndicator color="white" />}
+            {loading && <ActivityIndicator color="white" />}
           </TouchableOpacity>
         </View>
       </View>
@@ -65,6 +121,10 @@ const styles = StyleSheet.create({
     height: "100%",
     padding: 20,
     paddingTop: 50,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 16,
   },
   header: {
     width: "100%",
