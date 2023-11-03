@@ -1,8 +1,42 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Path, Svg } from "react-native-svg";
 import { InputUI } from "../../../../components/UI/Input";
+import { useState } from "react";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "../../../../config/firebase";
+import { updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 export function MyProfile({ navigation: { goBack } }) {
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+
+  const saveProfile = async () => {
+    try {
+      if (FIREBASE_AUTH.currentUser) {
+        const user = FIREBASE_AUTH.currentUser;
+        await updateProfile(user, {
+          displayName: `${firstName} ${lastName}`,
+        });
+        const userUid = user.uid;
+        const userRef = doc(FIRESTORE_DB, "users", userUid);
+        await setDoc(userRef, {
+          firstName,
+          lastName,
+        });
+        Alert.alert("Профиль обновлен успешно!");
+      }
+    } catch (error) {
+      Alert.alert("Произошла ошибка при сохранении профиля");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -27,7 +61,24 @@ export function MyProfile({ navigation: { goBack } }) {
         <Text style={styles.header_text}>Персональные данные</Text>
       </View>
       <View>
-        <InputUI placeholder="Hello" label="HELLO" />
+        <InputUI
+          placeholder="Имя"
+          label="Имя"
+          value={firstName}
+          onChangeText={(val) => setFirstName(val)}
+        />
+        <InputUI
+          placeholder="Фамилия"
+          label="Фамилия"
+          value={lastName}
+          onChangeText={(val) => setLastName(val)}
+        />
+        <View style={styles.button}>
+          <TouchableOpacity style={styles.signIn} onPress={saveProfile}>
+            <Text style={styles.textSign}>Сохранить</Text>
+            {false && <ActivityIndicator color="white" />}
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -51,5 +102,27 @@ const styles = StyleSheet.create({
   header_text: {
     fontSize: 20,
     fontWeight: "600",
+  },
+  button: {
+    alignItems: "center",
+  },
+  textSign: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  signIn: {
+    width: "100%",
+    height: 50,
+    backgroundColor: "#013c58",
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#BDBDBD",
+    borderWidth: 1,
+    borderRadius: 8,
+    marginTop: 15,
   },
 });

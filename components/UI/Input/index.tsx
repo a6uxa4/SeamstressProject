@@ -21,7 +21,7 @@ export function InputUI(props): JSX.Element {
     <View style={styles.containerInput}>
       {props.label && <Text style={styles.textLabel}>{props.label}</Text>}
       <TextInput
-        secureTextEntry={secureTextEntry}
+        secureTextEntry={props.password && secureTextEntry}
         style={styles.inputStyle}
         {...props}
       />
