@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Path, Svg } from "react-native-svg";
+import { InputUI } from "../../../../components/UI/Input";
 
 export function MyProfile({ navigation: { goBack } }) {
   return (
@@ -24,6 +25,9 @@ export function MyProfile({ navigation: { goBack } }) {
           </Svg>
         </TouchableOpacity>
         <Text style={styles.header_text}>Персональные данные</Text>
+      </View>
+      <View>
+        <InputUI placeholder="Hello" label="HELLO" />
       </View>
     </View>
   );

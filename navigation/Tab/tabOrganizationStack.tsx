@@ -2,7 +2,6 @@ import { Text, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Works } from "../../screens/Worker/works";
 import { Profile } from "../../screens/Worker/profile";
-import { Cooperator } from "../../screens/cooperator";
 import { Path, Svg } from "react-native-svg";
 
 const Tab = createBottomTabNavigator();
@@ -88,7 +87,7 @@ export default function OrganizationTabStack() {
       />
       <Tab.Screen
         name="Сотрудники"
-        component={Cooperator}
+        component={Profile}
         options={{
           tabBarLabel: ({ focused, children }) => (
             <Text style={{ color: !focused ? "#00537a" : "#a8e8f9" }}>

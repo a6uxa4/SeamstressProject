@@ -160,7 +160,10 @@ export function Profile({ navigation: { navigate } }) {
             </View>
           </View>
         </View>
-        <TouchableOpacity style={styles.container_menu_card}>
+        <TouchableOpacity
+          onPress={() => navigate("NewPassword")}
+          style={styles.container_menu_card}
+        >
           <View style={styles.container_icon}>
             <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
               <Path

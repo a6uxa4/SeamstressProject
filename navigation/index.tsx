@@ -39,8 +39,6 @@ export default function RootNavigation() {
 
   const role = "WORKER" || "ORGANIZATION";
 
-  console.log(user);
-
   if (loading) {
     return <Loading />;
   } else {
