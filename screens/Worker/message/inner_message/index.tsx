@@ -1,9 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export function InnerMessage({ navigation: { goBack } }) {
   return (
     <View style={styles.container}>
-      <Text>HELLo</Text>
+      <TouchableOpacity onPress={goBack}>
+        <Text>Назад</Text>
+      </TouchableOpacity>
     </View>
   );
 }
