@@ -1,6 +1,5 @@
 import {
   ActivityIndicator,
-  Alert,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -9,32 +8,24 @@ import {
 import { Path, Svg } from "react-native-svg";
 import { InputUI } from "../../../../components/UI/Input";
 import { useState } from "react";
-import { FIREBASE_AUTH, FIRESTORE_DB } from "../../../../config/firebase";
+import { FIREBASE_AUTH } from "../../../../config/firebase";
 import { updateProfile } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
 
 export function MyProfile({ navigation: { goBack } }) {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const saveProfile = async () => {
-    try {
-      if (FIREBASE_AUTH.currentUser) {
-        const user = FIREBASE_AUTH.currentUser;
-        await updateProfile(user, {
-          displayName: `${firstName} ${lastName}`,
-        });
-        const userUid = user.uid;
-        const userRef = doc(FIRESTORE_DB, "users", userUid);
-        await setDoc(userRef, {
-          firstName,
-          lastName,
-        });
-        Alert.alert("Профиль обновлен успешно!");
-      }
-    } catch (error) {
-      Alert.alert("Произошла ошибка при сохранении профиля");
-    }
+  const saveProfile = () => {
+    setLoading(true);
+    const user = FIREBASE_AUTH.currentUser;
+    const updatedDisplayName = `${firstName} ${lastName}`;
+    updateProfile(user, { displayName: updatedDisplayName }).then(() => {
+      setLastName("");
+      setFirstName("");
+      setLoading(false);
+      goBack();
+    });
   };
 
   return (
@@ -74,9 +65,13 @@ export function MyProfile({ navigation: { goBack } }) {
           onChangeText={(val) => setLastName(val)}
         />
         <View style={styles.button}>
-          <TouchableOpacity style={styles.signIn} onPress={saveProfile}>
+          <TouchableOpacity
+            disabled={loading}
+            style={styles.signIn}
+            onPress={saveProfile}
+          >
             <Text style={styles.textSign}>Сохранить</Text>
-            {false && <ActivityIndicator color="white" />}
+            {loading && <ActivityIndicator color="white" />}
           </TouchableOpacity>
         </View>
       </View>

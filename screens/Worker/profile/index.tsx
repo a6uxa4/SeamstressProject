@@ -12,9 +12,12 @@ import { FIREBASE_AUTH } from "../../../config/firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { signOut } from "firebase/auth";
 import { useState } from "react";
+import useAuth from "../../../hooks/useAuth";
 
 export function Profile({ navigation: { navigate } }) {
   const [isEnabled, setIsEnabled] = useState(false);
+
+  const { user } = useAuth();
 
   const handleLogout = async () => {
     try {
@@ -66,8 +69,10 @@ export function Profile({ navigation: { navigate } }) {
             </Svg>
           </View>
           <View style={styles.container_text}>
-            <Text style={styles.text_fullName}>Asan Asanov</Text>
-            <Text style={styles.text_email}>Abu@gmail.com</Text>
+            <Text style={styles.text_fullName}>
+              {user?.displayName || "Пользовотель"}
+            </Text>
+            <Text style={styles.text_email}>{user?.email}</Text>
           </View>
         </View>
       </View>
