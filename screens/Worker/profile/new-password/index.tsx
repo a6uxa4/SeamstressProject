@@ -50,7 +50,7 @@ export function NewPassword({ navigation: { goBack } }) {
         />
         <View style={styles.button}>
           <TouchableOpacity style={styles.signIn} onPress={goBack}>
-            <Text style={styles.textSign}>Регистрация</Text>
+            <Text style={styles.textSign}>Сохранить</Text>
             {false && <ActivityIndicator color="white" />}
           </TouchableOpacity>
         </View>
