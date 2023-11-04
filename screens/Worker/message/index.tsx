@@ -130,6 +130,6 @@ const styles = StyleSheet.create({
   },
   textFullName: {
     fontSize: 17,
-    fontWeight: "500",
+    fontWeight: "700",
   },
 });
