@@ -13,9 +13,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { signOut } from "firebase/auth";
 import { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
 
 export function Profile({ navigation: { navigate } }) {
   const [isEnabled, setIsEnabled] = useState(false);
+
+  const { UserData } = useSelector((state: RootState) => state.profile);
 
   const { user } = useAuth();
 
@@ -70,9 +74,9 @@ export function Profile({ navigation: { navigate } }) {
           </View>
           <View style={styles.container_text}>
             <Text style={styles.text_fullName}>
-              {user?.displayName || "Пользовотель"}
+              {UserData.firstName} {UserData.lastName}
             </Text>
-            <Text style={styles.text_email}>{user?.email}</Text>
+            <Text style={styles.text_email}>{UserData.email}</Text>
           </View>
         </View>
       </View>

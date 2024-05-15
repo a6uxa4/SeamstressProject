@@ -13,8 +13,14 @@ import * as Animatable from "react-native-animatable";
 import { ClipPath, Defs, G, Path, Rect, Svg } from "react-native-svg";
 import Feather from "react-native-vector-icons/Feather";
 import EvilIcons from "react-native-vector-icons/SimpleLineIcons";
-import { FIREBASE_AUTH } from "../../config/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "../../config/firebase";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
+import { useToast } from "react-native-toast-notifications";
+import { addDoc, collection } from "firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function SignUp({ navigation: { navigate } }) {
   const [data, setData] = useState({
@@ -22,21 +28,13 @@ export function SignUp({ navigation: { navigate } }) {
     password: "",
     secureTextEntry: true,
   });
+  const [userData, setUserData] = useState({
+    firstName: "",
+    lastName: "",
+  });
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleEmailChange = (val: string) => {
-    setData({
-      ...data,
-      email: val,
-    });
-  };
-
-  const handlePasswordChange = (val: string) => {
-    setData({
-      ...data,
-      password: val,
-    });
-  };
+  const toast = useToast();
 
   const updateSecureTextEntry = () => {
     setData({
@@ -46,23 +44,43 @@ export function SignUp({ navigation: { navigate } }) {
   };
 
   const signUp = async () => {
-    setLoading(true);
-    try {
-      await createUserWithEmailAndPassword(
-        FIREBASE_AUTH,
-        data.email,
-        data.password
-      );
-      setLoading(false);
-      setData({
-        email: "",
-        password: "",
-        secureTextEntry: true,
-      });
-    } catch (error) {
-      console.log("error");
-    } finally {
-      setLoading(false);
+    if (
+      data.email === "" ||
+      data.password === "" ||
+      userData.firstName === "" ||
+      userData.lastName === ""
+    ) {
+      toast.show("Заполните все данные", { type: "warning" });
+    } else {
+      setLoading(true);
+      try {
+        const userCredential = await createUserWithEmailAndPassword(
+          FIREBASE_AUTH,
+          data.email,
+          data.password
+        );
+        await sendEmailVerification(userCredential.user);
+        await addDoc(collection(FIRESTORE_DB, "Users"), {
+          email: data.email,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+        }).then((res) => {
+          try {
+            AsyncStorage.setItem("tokenID", res.id);
+          } catch (error) {}
+        });
+
+        setLoading(false);
+        setData({
+          email: "",
+          password: "",
+          secureTextEntry: true,
+        });
+      } catch (error) {
+        toast.show("Ошибка при регистрации", { type: "warning" });
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -88,7 +106,7 @@ export function SignUp({ navigation: { navigate } }) {
               placeholder="Email"
               style={styles.textInput}
               autoCapitalize="none"
-              onChangeText={(val) => handleEmailChange(val)}
+              onChangeText={(val) => setData({ ...data, email: val })}
               value={data.email}
             />
           </View>
@@ -100,7 +118,7 @@ export function SignUp({ navigation: { navigate } }) {
               secureTextEntry={data.secureTextEntry ? true : false}
               style={styles.textInput}
               autoCapitalize="none"
-              onChangeText={(val) => handlePasswordChange(val)}
+              onChangeText={(val) => setData({ ...data, password: val })}
               value={data.password}
             />
             <TouchableOpacity onPress={updateSecureTextEntry}>
@@ -110,6 +128,30 @@ export function SignUp({ navigation: { navigate } }) {
                 <Feather name="eye" color="grey" size={20} />
               )}
             </TouchableOpacity>
+          </View>
+          <Text style={styles.text_footer}>Имя</Text>
+          <View style={styles.action}>
+            <TextInput
+              placeholder="Имя"
+              style={styles.textInput}
+              autoCapitalize="none"
+              onChangeText={(val) =>
+                setUserData({ ...userData, firstName: val })
+              }
+              value={userData.firstName}
+            />
+          </View>
+          <Text style={styles.text_footer}>Фамилия</Text>
+          <View style={styles.action}>
+            <TextInput
+              placeholder="Фамилия"
+              style={styles.textInput}
+              autoCapitalize="none"
+              onChangeText={(val) =>
+                setUserData({ ...userData, lastName: val })
+              }
+              value={userData.lastName}
+            />
           </View>
           <View style={styles.button}>
             <TouchableOpacity
@@ -214,7 +256,7 @@ const styles = StyleSheet.create({
   text_footer: {
     color: "grey",
     fontSize: 18,
-    marginTop: 35,
+    marginTop: 30,
   },
   action: {
     flexDirection: "row",

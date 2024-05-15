@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from "react";
 import AuthStack from "./Stack/authStack";
 import { onAuthStateChanged } from "firebase/auth";
-import { FIREBASE_AUTH } from "../config/firebase";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "../config/firebase";
 import Loading from "../components/Loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import WorkerStack from "./Stack/workerStack";
 import OrganizationStack from "./Stack/organizationStack";
+import VerifcationPage from "../screens/sign-up/verification";
+import { useDispatch } from "react-redux";
+import { saveTokenID, saveUserData } from "../store/slice/profile";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function RootNavigation() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
@@ -25,6 +31,17 @@ export default function RootNavigation() {
 
     const checkAsyncStorage = async () => {
       const storedUser = await AsyncStorage.getItem("user");
+      const storedUserToken = await AsyncStorage.getItem("tokenID");
+      const userDocRef = doc(FIRESTORE_DB, "Users", storedUserToken);
+      getDoc(userDocRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          const userData = snapshot.data();
+          dispatch(saveUserData(userData));
+        }
+      });
+      if (storedUserToken) {
+        dispatch(saveTokenID(storedUserToken));
+      }
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       }
@@ -43,16 +60,20 @@ export default function RootNavigation() {
     return <Loading />;
   } else {
     if (user) {
-      switch (role) {
-        case "WORKER":
-          return <WorkerStack />;
-        case "ORGANIZATION":
-          return <OrganizationStack />;
-        default:
-          return <AuthStack />;
+      if (!FIREBASE_AUTH.currentUser?.emailVerified) {
+        return <VerifcationPage />;
+      } else {
+        switch (role) {
+          case "WORKER":
+            return <WorkerStack />;
+          case "ORGANIZATION":
+            return <OrganizationStack />;
+          default:
+            return <AuthStack />;
+        }
       }
     } else {
-      return <AuthStack />;
+      return <WorkerStack />;
     }
   }
 }
